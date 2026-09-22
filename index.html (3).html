@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MOVES Education BD — Costing Sheet</title>
+<style>
+:root{
+  --ink:#1c2b2e;
+  --paper:#f6f2ea;
+  --paper-2:#efe8da;
+  --line:#c9bfa8;
+  --accent:#8a3324;
+  --accent-2:#2c5f52;
+  --muted:#6b6355;
+  --white:#fffdf8;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  box-sizing: border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#efe9dd; --paper:#1b1a16; --paper-2:#232019; --line:#4a4436;
+    --accent:#e08a6f; --accent-2:#7fb6a4; --muted:#a79f8c; --white:#252219;
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#efe9dd; --paper:#1b1a16; --paper-2:#232019; --line:#4a4436;
+  --accent:#e08a6f; --accent-2:#7fb6a4; --muted:#a79f8c; --white:#252219;
+}
+*{box-sizing:border-box;}
+html{scroll-padding-top: env(safe-area-inset-top, 0px);}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family: "Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  min-height:100%;
+}
+.masthead{
+  border-bottom:3px double var(--line);
+  padding:28px 20px 18px;
+  text-align:center;
+  position:relative;
+}
+.masthead h1{
+  font-size:clamp(22px,4vw,34px);
+  letter-spacing:0.02em;
+  margin:0 0 4px;
+  font-weight:600;
+}
+.masthead .sub{
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:12.5px;
+  color:var(--muted);
+  letter-spacing:0.08em;
+}
+.theme-toggle{
+  position:absolute; right:16px; top:16px;
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:12px; background:none; border:1px solid var(--line);
+  color:var(--ink); border-radius:20px; padding:6px 12px; cursor:pointer;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:0 16px 60px;}
+.toolbar{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  padding:16px 0; font-family:"Helvetica Neue",Arial,sans-serif;
+}
+.toolbar input[type=search]{
+  flex:1; min-width:160px; padding:9px 12px; border-radius:8px;
+  border:1px solid var(--line); background:var(--white); color:var(--ink); font-size:14px;
+}
+.btn{
+  font-family:"Helvetica Neue",Arial,sans-serif;
+  font-size:13.5px; border:1px solid var(--line); background:var(--white);
+  color:var(--ink); padding:9px 14px; border-radius:8px; cursor:pointer;
+}
+.btn.primary{ background:var(--accent-2); color:var(--white); border-color:var(--accent-2); font-weight:600;}
+.btn.danger{ color:var(--accent); border-color:var(--accent);}
+.btn:disabled{opacity:0.5; cursor:not-allowed;}
+.status{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px; color:var(--muted);
+  min-height:16px;
+}
+.layout{ display:grid; grid-template-columns:250px 1fr; gap:24px; align-items:start;}
+@media (max-width:760px){ .layout{grid-template-columns:1fr;} }
+.sidebar{
+  background:var(--white); border:1px solid var(--line); border-radius:10px;
+  padding:10px; position:sticky; top:16px; max-height:80vh; overflow:auto;
+}
+.sidebar h2{font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; letter-spacing:0.08em; color:var(--muted); margin:6px 8px;text-transform:uppercase;}
+.sidebar button.cat{
+  display:block; width:100%; text-align:left; background:none; border:none;
+  padding:8px 10px; border-radius:6px; cursor:pointer; color:var(--ink);
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:13.5px;
+  border-left:3px solid transparent;
+}
+.sidebar button.cat:hover{background:var(--paper-2);}
+.sidebar button.cat.active{background:var(--paper-2); border-left-color:var(--accent);font-weight:600;}
+.sheet{
+  background:var(--white); border:1px solid var(--line); border-radius:10px;
+  padding:20px 22px 26px;
+}
+.sheet-head{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+  flex-wrap:wrap; margin-bottom:14px; border-bottom:2px solid var(--line); padding-bottom:12px;
+}
+.sheet-head input.title{
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  font-size:22px; font-weight:600; border:none; background:none; color:var(--ink);
+  padding:2px 4px; border-bottom:1px dashed transparent; min-width:200px;
+}
+.sheet-head input.title:focus{ border-bottom:1px dashed var(--accent); outline:none;}
+table.fees{ width:100%; border-collapse:collapse; margin-bottom:18px;}
+table.fees th{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; letter-spacing:0.06em;
+  text-transform:uppercase; color:var(--muted); text-align:left; padding:6px 8px; border-bottom:1px solid var(--line);
+}
+table.fees td{ padding:4px 6px; vertical-align:top;}
+table.fees tr + tr td{ border-top:1px solid var(--paper-2);}
+table.fees input{
+  width:100%; border:1px solid transparent; background:none; color:var(--ink);
+  font-family:inherit; font-size:14.5px; padding:6px 6px; border-radius:5px;
+}
+table.fees input:hover{border-color:var(--line);}
+table.fees input:focus{ outline:none; border-color:var(--accent-2); background:var(--paper);}
+table.fees td.rm{ width:34px; text-align:center;}
+.rm-btn{
+  background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;line-height:1;
+  padding:4px;border-radius:4px;
+}
+.rm-btn:hover{color:var(--accent); background:var(--paper-2);}
+.addrow{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:13px; background:none;
+  border:1px dashed var(--line); color:var(--muted); padding:7px 12px; border-radius:6px; cursor:pointer;
+  margin-bottom:22px;
+}
+.addrow:hover{color:var(--accent-2); border-color:var(--accent-2);}
+.section-label{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:11px; letter-spacing:0.08em;
+  text-transform:uppercase; color:var(--muted); margin:0 0 8px;
+}
+ul.checklist{ list-style:none; padding:0; margin:0 0 12px;}
+ul.checklist li{
+  display:flex; align-items:flex-start; gap:8px; padding:5px 0; border-bottom:1px solid var(--paper-2);
+}
+ul.checklist li:before{content:"▪"; color:var(--accent-2); font-size:12px; margin-top:9px;}
+ul.checklist textarea{
+  flex:1; border:1px solid transparent; background:none; color:var(--ink);
+  font-family:inherit; font-size:14px; resize:none; padding:6px; border-radius:5px; min-height:1.6em;
+}
+ul.checklist textarea:hover{border-color:var(--line);}
+ul.checklist textarea:focus{outline:none; border-color:var(--accent-2); background:var(--paper);}
+.footer-field{
+  margin-top:8px; font-family:"Helvetica Neue",Arial,sans-serif; font-size:12.5px; color:var(--muted);
+}
+.footer-field textarea{
+  width:100%; margin-top:4px; border:1px solid var(--line); background:var(--paper); color:var(--ink);
+  border-radius:6px; padding:8px; font-family:inherit; font-size:13px; min-height:44px;
+}
+.empty{
+  text-align:center; padding:60px 20px; color:var(--muted); font-family:"Helvetica Neue",Arial,sans-serif;
+}
+.newcat{
+  display:flex; gap:6px; padding:8px; border-top:1px solid var(--line); margin-top:6px;
+}
+.newcat input{
+  flex:1; font-size:13px; padding:7px 8px; border-radius:6px; border:1px solid var(--line);
+  background:var(--paper); color:var(--ink); font-family:"Helvetica Neue",Arial,sans-serif;
+}
+.readonly-banner{
+  background:var(--paper-2); border:1px solid var(--line); border-radius:8px; padding:10px 14px;
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:13px; color:var(--muted); margin-bottom:14px;
+}
+.share-btn{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:13px; background:var(--white);
+  border:1px solid var(--accent-2); color:var(--accent-2); padding:8px 14px; border-radius:8px;
+  cursor:pointer; white-space:nowrap; font-weight:600;
+}
+.share-btn:hover{ background:var(--accent-2); color:var(--white); }
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,18,12,0.55); z-index:100;
+  display:flex; align-items:center; justify-content:center; padding:20px;
+}
+.modal-box{
+  background:var(--paper); border:1px solid var(--line); border-radius:12px;
+  max-width:560px; width:100%; max-height:85vh; overflow:auto; padding:22px 24px 24px;
+  position:relative;
+}
+.modal-close{
+  position:absolute; right:14px; top:14px; background:none; border:none; font-size:20px;
+  color:var(--muted); cursor:pointer; line-height:1;
+}
+.modal-close:hover{color:var(--accent);}
+.modal-box h3{ margin:0 0 4px; font-size:20px; }
+.modal-sub{
+  font-family:"Helvetica Neue",Arial,sans-serif; font-size:12px; color:var(--muted);
+  margin:0 0 16px; letter-spacing:0.04em; text-transform:uppercase;
+}
+.preview-fees{ width:100%; border-collapse:collapse; margin-bottom:14px; font-size:14px; }
+.preview-fees td{ padding:5px 4px; border-bottom:1px solid var(--paper-2); vertical-align:top; }
+.preview-fees td:first-child{ color:var(--muted); padding-right:10px; white-space:pre-wrap; }
+.preview-fees td:last-child{ white-space:pre-wrap; font-weight:600; }
+.preview-checklist{ margin:0 0 16px; padding-left:18px; font-size:13.5px; }
+.preview-checklist li{ margin-bottom:6px; }
+.preview-footer{ font-size:12.5px; color:var(--muted); white-space:pre-wrap; margin-bottom:18px; }
+.modal-actions{ display:flex; gap:10px; flex-wrap:wrap; font-family:"Helvetica Neue",Arial,sans-serif; }
+.modal-actions .btn{ flex:1; min-width:140px; text-align:center; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <button class="theme-toggle" id="themeToggle" type="button">☾/☀</button>
+  <h1>MOVES Education BD</h1>
+  <div class="sub">COSTING &amp; DOCUMENT SHEET — EDITABLE</div>
+</div>
+
+<div class="wrap">
+  <div class="toolbar">
+    <input type="search" id="search" placeholder="Search country or category…">
+    <button class="btn primary" id="saveBtn">Save changes</button>
+    <button class="btn danger" id="deleteBtn">Delete this sheet</button>
+    <span class="status" id="status"></span>
+  </div>
+
+  <div id="readonlyBanner" class="readonly-banner" style="display:none;">
+    You're viewing a read-only copy — edits here won't be saved. Ask the sheet owner for edit access to save changes.
+  </div>
+
+  <div class="layout">
+    <div class="sidebar">
+      <h2>Categories</h2>
+      <div id="catList"></div>
+      <div class="newcat">
+        <input type="text" id="newCatName" placeholder="Add new country/category">
+        <button class="btn" id="addCatBtn">+</button>
+      </div>
+    </div>
+    <div class="sheet" id="sheet"></div>
+  </div>
+</div>
+
+<div id="shareModal" class="modal-overlay" style="display:none;"></div>
+
+<script>
+let DATA = [{"name": "ITALY", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 50 - € 100 (N/R)"], ["Tuition Fee-", "No tuition fees"], ["Sponsor-", "25+ Lacs taka"], ["Embassy/Visa Fee-", "Tk. 6,000/= (N/R)"], ["VFS/Appointment Fee-", "Tk. 4,560/= (N/R)"], ["Insurance Fee-", "€ 140 Approx (Partly Refundable)"], ["Medical Fee-", ""], ["CIMEA/Case Order/Other-", "€ 300 (N/R)"], ["RP Card/Other-", "€ 35 – TOLC (N/R)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "AUSTRALIA", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "N / A"], ["Tuition Fee-", "10 to 15 Lacs taka"], ["Sponsor-", "65+ Lacs taka"], ["Embassy/Visa Fee-", "AUD $ 2,028 (N/R)"], ["VFS/Appointment Fee-", "Tk. 2,600/= (N/R)"], ["Insurance Fee-", "AUD $ 1,250 - $ 1,500 (N/R)"], ["Medical Fee-", "Tk. 8,000/= (N/R)"], ["CIMEA/Case Order/Other-", ""], ["RP Card/Other-", ""], ["Other Cost/Documentation-", "Tk. 60k to 100k"], ["Service Charge-", "No Service Charge (without sponsor)\nTk. 100,000/= For Spouse/Kid (P/P)"]], "checklist": [], "footer": ""}, {"name": "UK", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "N / A"], ["Tuition Fee-", "£ 5,000 to £ 8,500 Half Yearly"], ["Sponsor-", "35 to 40 Lacs taka"], ["Embassy/Visa Fee-", "£ 524 (N/R) (Tk.87,000/=)"], ["VFS/Appointment Fee-", ""], ["Insurance Fee-", "£ 776 per year (N/R)"], ["Medical Fee-", "Tk. 5,500/= (N/R)"], ["CIMEA/Case Order/Other-", ""], ["RP Card/Other-", ""], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "No Service Charge (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "USA", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "$ 50 to $ 150 (N/R)"], ["Tuition Fee-", ""], ["Sponsor-", "90+ Lacs taka"], ["Embassy/Visa Fee-", "$ 185 or Tk. 23,000/= appx. (N/R)"], ["VFS/Appointment Fee-", ""], ["Insurance Fee-", ""], ["Medical Fee-", ""], ["CIMEA/Case Order/Other-", "USD $ 350 – SEVIS (N/R)"], ["Other Cost/Documentation-", "Tk. 1 Lac (N/R)"], ["Service Charge-", "Tk. 200,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "CANADA", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "CAD $ 75 to $ 150 (N/R)"], ["Tuition Fee-", "5 to 7 Lacs taka"], ["Sponsor-", "70+ Lacs taka"], ["Embassy/Visa Fee-", "Tk. 23,000/= (N/R)"], ["VFS/Appointment Fee-", ""], ["Insurance Fee-", ""], ["Medical Fee-", "Tk. 8,000/= (N/R)"], ["CIMEA/Case Order/Other-", ""], ["Other Cost/Documentation-", "Tk. 40k to 60k"], ["Service Charge-", "Tk. 300,000/= (without Sponsor)\nTk. 100,000/= For Spouse/Kid (P/P)"]], "checklist": [], "footer": ""}, {"name": "MALTA", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 150 (N/R)"], ["Tuition Fee-", "€ 6,500 to € 8,000"], ["Sponsor-", "25 to 30 Lacs taka"], ["Embassy/Visa Fee-", "€ 150 (N/R)"], ["VFS/Appointment Fee-", "Tk. 20k to 25k (N/R)"], ["Insurance Fee-", "€ 198 (partly refundable)"], ["Medical Fee-", ""], ["CIMEA/Case Order/Other-", ""], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (without Sponsor)"]], "checklist": [], "footer": ""}, {"name": "SWEDEN", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "SEK 900 (N/R)"], ["Tuition Fee-", "7 to 10 Lacs taka yearly (Approx.)"], ["Sponsor-", "25 to 30 Lacs taka"], ["Embassy/Visa Fee-", "SEK 1,500 (N/R)"], ["VFS/Appointment Fee-", "N/A"], ["Insurance Fee-", "N/A"], ["CIMEA/Case Order/Other-", "N/A"], ["RP Card/Other-", "Tk. 4,000/= DHL (N/R)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 200,000/= (Without Sponsor)\nTk. 100,000/= (Spouse/Child) P/P"]], "checklist": [], "footer": ""}, {"name": "FINLAND", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 100 (N/R)"], ["Tuition Fee-", "7 to 10 Lacs taka yearly"], ["Sponsor-", "30+ Lacs taka"], ["Embassy/Visa Fee-", "€ 350 (N/R)"], ["VFS/Appointment Fee-", "Tk. 12,000/= (N/R)"], ["Insurance Fee-", "€ 197 (partly refundable)"], ["CIMEA/Case Order/Other-", "Tk. 4,000/= DHL (N/R)"], ["RP Card/Other-", "Tk. 3,400/= (N/R)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 200,000/= (Without Sponsor)\nTk. 100,000/= (Spouse/Child) P/P"]], "checklist": [], "footer": ""}, {"name": "DENMARK", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "DKK 750 – 1150 (N/R)"], ["Tuition Fee-", "DKK 34,000 – 90,000"], ["Sponsor-", "25+ Lacs taka"], ["Embassy/Visa Fee-", "DKK 1,745 appx. (N/R)"], ["VFS/Appointment Fee-", "Tk. 2,600/= appx. (N/R)"], ["Insurance Fee-", "N/A"], ["CIMEA/Case Order/Other-", "DKK 2,387 appx. (N/R)"], ["RP Card/Other-", "N/A"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (Without Sponsor)\nTk. 100,000/= (Spouse/Child) P/P"]], "checklist": [], "footer": ""}, {"name": "HUNGARY", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 50 - € 200 (N/R)"], ["Tuition Fee-", "€ 2,500 - € 8,000"], ["Sponsor-", "20 to 25 Lacs taka"], ["Embassy/Visa Fee-", "Tk. 20,000/= + (N/R)"], ["Insurance Fee-", "€ 198 (partly refundable)"], ["Medical Fee-", "N/A"], ["Attestation/Apostille cost-", "N/A"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "CYPRUS", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "N/A"], ["Tuition Fee-", "€ 4,000 - € 6,500 yearly"], ["Sponsor-", "12+ Lacs taka"], ["Embassy/Visa Fee-", "€ 60 (N/R)"], ["Insurance Fee-", "N/A"], ["Medical Fee-", "N/A"], ["Attestation/Apostille cost-", "Tk 15k to 20k (N/R)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 100,000/= (With Sponsor)"]], "checklist": [], "footer": ""}, {"name": "NEW ZEALAND", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "N/A"], ["Tuition Fee-", "NZD $ 22k to $ 40k"], ["Sponsor-", "65+ Lacs taka"], ["Embassy/Visa Fee-", "Tk. 60k + (N/R)"], ["Insurance Fee-", "After arrival NZD $1,000 (N/R)"], ["Medical Fee-", "Tk. 13,500/= (N/R)"], ["Attestation/Apostille cost-", ""], ["Other Cost/Documentation-", "Tk. 40k to 60k"], ["Service Charge-", "No Service Charge (No sponsor)\nTk. 100,000/= (for Spouse/Kid) P/P"]], "checklist": [], "footer": ""}, {"name": "CANADA SCHOOLING", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "CAD  350 - 600 (N/R)                                                                 (1CAD=87+ BDT)"], ["Tuition Fee-", "CAD 11,000 – 20,000"], ["Sponsor-", "80 + Lacs Taka                                                        (With parents)"], ["Embassy/Visa Fee-", "CAD 235 (N/R)"], ["Medical Fee-", "Tk.8,000/="], ["Service charge -", "3,00000 /=\n1,00000/= (For Spouse or child each )"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "NEW ZEALAND SCHOOLING", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "NZD 500 - 1,000 (N/R)                                                                                                                           (1NZD =70+BDT)"], ["Tuition Fee-", "NZD 15,000+"], ["Sponsor-", "60+ Lacs Taka"], ["Embassy/Visa Fee-", "NZD 850 for Applicant   ($ 441 for Per Parent (N/R))"], ["VFS/Appointment Fee-", "N/A"], ["Insurance Fee-", "NZD 600"], ["Medical Fee-", "13,500/= (N/R)"], ["Other Cost/Documentation-", "60k to 100k"], ["Service Charge-", "300,000/=\n200,000/= (One Parent)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (Apostilled)", "Nikah Nama and Marriage Certificate (in English and Notarized Original & Apostilled Copy)", "For Children (Birth Certificate and School ID Card and Result)", "Parents NID Card (Apostilled)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "Opportunity Card (GERMANY)", "fees": [["Membership Fee-", "Tk. 30,000/= (N/R) For main applicant\nTk. 50,000/= (N/R) For family applicant"], ["Application Fee-", "N / A"], ["Visa Fee-", "€ 75 (N/R)"], ["Block Money Deposit-", "€ 13,341"], ["ZAB Cost", "€ 208 (N/R)"], ["Accommodation cost-", "Variable"], ["Other cost-", "€ 100 (N/R)"], ["Service Charge-", "Tk. 300,000/= For main applicant\nTk. 200,000/= For Spouse\nTk. 100,000/= For Children (Per Kid)"]], "checklist": [], "footer": ""}, {"name": "NETHERLAND", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 80 - € 150 (N/R)"], ["Tuition Fee-", "€ 7,000 - € 13,000"], ["Sponsor-", "20 + Lacs Taka"], ["Embassy/Visa Fee-", "€ 207 (N/R)"], ["VFS/Appointment Fee-", "N/A"], ["Insurance Fee-", "€ 198 (partly refundable)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "IRELAND", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Admission Application Fee-", "€ 100 - € 150 (N/R)"], ["Tuition Fee-", "€ 8,000 - € 13,000"], ["Sponsor-", "20 + Lacs Taka"], ["Embassy/Visa Fee-", "€ 100 (N/R)"], ["VFS/Appointment Fee-", "N/A"], ["Insurance Fee-", "€ 198 (partly refundable)"], ["Other Cost/Documentation-", "Tk. 15k to 25k"], ["Service Charge-", "Tk. 300,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "GREECE", "fees": [["Membership Fee-", "Tk. 10,000/= (N/R)"], ["Admission Application Fee-", ""], ["Tuition Fee-", "Tuition Fee Deposit before visa 3000 – 3290 Euro (or off)"], ["Sponsor-", ""], ["Embassy/Visa Fee-", "Embassy Fee - €90 (12,960 BDT)"], ["VFS/Appointment Fee-", "VFS Charges: 30 Euro"], ["Insurance Fee-", "€ 198 (partly refundable)"], ["Other Cost/Documentation-", "Tk. 15k to 25k\nCross-Border Delivery Charge: 10,200 BDT \nRegular VFS Service Fee: 14,900 BDT\nMedical: 11,800 Rupees / 15000 BDT\nAlmost 60,000 BDT \nAfter visa tuition fee deposit:"], ["Service Charge-", "Tk. 300,000/= (without sponsor)"]], "checklist": [], "footer": ""}, {"name": "SCHENGEN (VISIT)", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Bank Solvency", "30+ Lacs taka Approx.                                          (Variable to country wise)"], ["Embassy/Visa Fee-", "Euro 90 +/- Approx (N/R)                                           (1 Euro=147+ BDT)"], ["Insurance Fee-", "8,000/= + (N/R)"], ["Other Cost- Courier/Profile Docs", "Tk. 25k to 40k (N/R)"], ["Service Charge-", "300,000/=\n500,000/= (For spouse or Child)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "AUSTRALIA (VISIT)", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Sponsor-", "65+ Lacs taka"], ["Embassy/Visa Fee-", "AUD $ 250 (N/R)"], ["VFS/Appointment Fee-", "Tk. 2,640/= (N/R)"], ["Insurance Fee-", "(N/A)"], ["Other Cost-", "Tk. 60k to 100k"], ["Service Charge-", "No Service Charge (without sponsor)\nTk. 100,000/= For Spouse/Kid (P/P)"]], "checklist": [], "footer": ""}, {"name": "UK (VISIT)", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Bank solvency", "30+ Lac"], ["Embassy/Visa Fee-", "GBP 135 (N/R)\t(1 Pound =165+ BDT)"], ["VFS/Appointment Fee-", ""], ["Insurance Fee-", "GBP 30 (N/R)"], ["Other Cost-", "Tk. 25k (N/R)"], ["Service Charge-", "100,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (Apostilled)", "Nikah Nama and Marriage Certificate (in English and Notarized Original & Apostilled Copy)", "For Children (Birth Certificate and School ID Card and Result)", "Parents NID Card (Apostilled)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n01958096752, 01958-096775"}, {"name": "USA (VISIT)", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Bank Solvency", "50 to 70 Lacs taka"], ["Embassy/Visa Fee-", "USD 185 (N/R)                                                             (1 USD = 126+ BDT)"], ["Other Cost / Documentation", "100,000/= (N/R)"], ["Service Charge-", "300,000/=\n100,000/= (Each for spouse and child)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (if required)", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "CANADA (VISIT)", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Bank solvency", "30+ Lacs Taka                                                        (For spouse and child 10+ lacs taka)"], ["Embassy/Visa Fee-", "CAD 185 (N/R)                                                                                      (1 CAD = 87+ TAKA)"], ["Other Cost-", "TK.60k (N/R)"], ["Service Charge-", "300,000/=\n200,000/= For Spouse\n100,000/= Per Kid"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "NID (Own and Sponsor) ▪ Birth Certificate ▪ Police Clearance Certificate ▪ Utility Bill Copy", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "NEW ZEALAND (VISIT)", "fees": [["Membership Fee-", "Tk. 20,000/= (N/R)"], ["Sponsor-", "25 to 30 Lacs taka"], ["Embassy/Visa Fee-", "NZD $ 441 (N/R)"], ["VFS/Appointment Fee-", "Tk. 4k to 5k (N/R)"], ["Insurance Fee-", "NZD $20 to $ 50"], ["Other Cost-", "Tk. 40k to 60k"], ["Service Charge-", "Tk. 300,000/= (without Sponsor)\nTk. 200,000/= For Spouse\nTk. 100,000/= Per Kid"]], "checklist": [], "footer": ""}, {"name": "UK STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "N / A"], ["Tuition Fee-", "GBP 7500 - 9,500 First installment                             (1 pound = 165+ BDT)"], ["Sponsor-", "35 to 40 Lacs (for 28 days)"], ["Embassy/Visa Fee-", "GBP 524 (N/R) (87,000/= Approx.)"], ["Insurance Fee-", "GBP 776 per year (N/R)"], ["Medical Fee-", "5,500/= (N/R)"], ["Other Cost / Documentation", "25k (N/R)"], ["Service Charge-", "100,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "AUSTRALIA STUDENT", "fees": [["Membership Fee-", "20,000/=  (N/R)"], ["Admission Application Fee-", "N /A"], ["Tuition Fee-", "10 to 15 Lacs taka Approx."], ["Sponsor-", "60+ Lacs taka"], ["Embassy/Visa Fee-", "AUD 2,500 (N/R)                                                              (1 AUD = 87+Taka)"], ["Insurance Fee-", "AUD 1,500 (N/R)"], ["Medical Fee-", "8,000/= (N/R)"], ["Other Cost / Documentation-", "Tk. 60k to 100k (N/R)"], ["Service Charge-", "100,000/= for Spouse or Child per kid"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "ITALY STUDENT", "fees": [["Membership Fee-", "20,000/=  (N/R)"], ["Admission Application Fee-", "Euro 20 –100  (N/R)                                                           (1Euro = 147+BDT )"], ["Tuition Fee-", "No tuition fees"], ["Sponsor-", "25+ lac"], ["Embassy/Visa Fee-", "12590/=  (N/R)"], ["VFS/Appointment Fee-", "4,560/=  (N/R)"], ["CIMEA/IOM", "Euro 300  (N/R)  \nIOM 22000 (N/R)"], ["TOLC Exam", "Euro 35 (N/R)"], ["Health Insurance", "Euro 150 (Partially Refundable)"], ["Other Cost / Documentation-", "Tk.25k (N/R)"], ["Service Charge-", "300,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original and Copy (Apostilled) [Present and all old with all Visa Pages]", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate (Apostilled) ▪ Police Clearence", "Sponsor’s NID and E TIN and Tax Return – Last 2 years (Apostilled)", "Family Certificate (Apostilled)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "DENMARK STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "DKK 750 + (N/R)                                                                                                                           (1 DKK=18+BDT)"], ["Tuition Fee-", "DKK 34,000+"], ["Sponsor-", "25+ Lacs taka"], ["Embassy/Visa Fee-", "DKK 1,745 appx. (N/R)"], ["VFS/Appointment Fee-", "2,600/= appx. (N/R)"], ["Insurance Fee-", "N/A"], ["CIMEA/Case Order/Other-", "DKK 2,387 appx. (N/R)"], ["Other Cost/Documentation-", "Tk. 25k (N/R)"], ["Service Charge-", "300,000/=\n100,000/= (Spouse/Child)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n                                                        01916-276797, 01958-096775, 01958-096751"}, {"name": "FINLAND STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "Euro 100 (N/R)                                                                                                      (1 Euro = 146+ BDT )"], ["Tuition Fee-", "Euro 8,000+   Yearly"], ["Sponsor-", "14+ Lacs taka"], ["Embassy/Visa Fee-", "Euro 650 (N/R)"], ["VFS/Appointment Fee-", "12,000/= (N/R)"], ["Insurance Fee-", "Euro 197 (partly refundable)"], ["DHL /Other-", "5500/= (N/R)"], ["Other Cost/Documentation-", "Tk. 25k (N/R)"], ["Service Charge-", "200,000/= \n100,000/=   (Spouse/Child)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID (Own and Sponsor) ▪ Birth Certificate ▪ Police Clearance Certificate ▪ Utility Bill Copy", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "CANADA STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "CAD 50 to 200 (N/R) {depends on the university}                                   (1 CAD = 87+TAKA)"], ["Tuition Fee-", "One year approx.  CAD 18000+"], ["Sponsor-", "80+ Lacs taka"], ["Embassy/Visa Fee-", "235 (N/R)"], ["Medical Fee-", "8,000/= (N/R)"], ["Other Cost / Documentation", "40k to 60k (N/R)"], ["Spouse Open Work Permit", "CAD 575 (N/R)"], ["Service Charge-", "300,000/= \n100,000/= (for Spouse/kid)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID (Own and Sponsor) ▪ Birth Certificate ▪ Police Clearance Certificate ▪ Utility Bill Copy", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "SWEDEN STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "SEK 900 (N/R)                                                                                                   (1 SEK=13+ BDT )"], ["Tuition Fee-", "6 to 8 Lacs taka Approx.        (1st Installment)"], ["Sponsor-", "25 to 30 Lacs taka"], ["Embassy/Visa Fee-", "SEK 1,500 (N/R)"], ["DHL Courier Cost-", "4,000/= (N/R)"], ["Other Cost / Documentation-", "TK. 25k (N/R)"], ["Service Charge-", "200,000/=\n100,000/= (for Spouse/Kid)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "NEW ZEALAND STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "N/A"], ["Tuition Fee-", "13 to 25 Lacs taka approx."], ["Sponsor-", "35+ Lacs taka"], ["Embassy/Visa Fee-", "NZD 850                                                                                              (1 NZD = 72+ BDT )"], ["Medical Fee-", "Tk. 9000+(N/R)"], ["Other Cost / Documentation-", "Tk. 60k (N/R)"], ["Service Charge-", "NO SERVICE CHARGE\n100,000/= (Spouse/Child)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n                                                                     01916-276797, 01958-096775, 01958-096751"}, {"name": "HUNGARY STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "Euro 50 - 150 (N/R)"], ["Tuition Fee-", "Euro 6000+ Yearly                                             ( 1 Euro=146+ BDT)"], ["Sponsor-", "25+ lac BDT"], ["Embassy/Visa Fee-", "110 Euro (N/A)"], ["VFS/Appointment Fee-", "Tk.25 k (N/R)"], ["Insurance Fee-", "Euro 200+ (partly refundable)"], ["Other Cost / Documentation-", "Tk. 25k (N/R)"], ["Service Charge-", "300,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)", "For Spouse and Children (additionally include all above mentioned documents for each person)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "CYPRUS STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Tuition Fee-", "Euro 4,000+                                                                            (1 Euro =146+BDT )"], ["Sponsor-", "12+ lac taka"], ["DHL Fee-", "4,500/= (N/R)"], ["VFS Fee", "10000/= ( N/R)"], ["Embassy Fee", "Euro 60"], ["Other Cost/Documentation-", "Tk.25k (N/R)"], ["Service Charge-", "Tk. 100,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (if required)", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "USA STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Admission Application Fee-", "USD 50 - 150 (N/R)                                                                       (1USD=122+ BDT)"], ["Tuition Fee-", "USD 15,000–20,000                      (After Visa )"], ["Sponsor-", "90+ Lacs taka"], ["Embassy/Visa Fee-", "USD 185 (N/R)                               (23,000/= appx.)"], ["Sevis Fee/Other-", "USD 350 (N/R)"], ["Other Cost/Documentation-", "Tk. 1 Lac (N/R)"], ["Service Charge-", "200,000/="]], "checklist": [], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "GREECE STUDENT", "fees": [["Membership Fee-", "20,000/= (N/R)"], ["Tuition Fee-", "Tuition Fee Deposit before visa 3000 – 3290 Euro (First Installment)                        (1Euro=147+ BDT)"], ["Sponsor-", "TK. 25+LACS                                                                  (FOR 3 TO 6 MONTHS)"], ["Embassy/Visa Fee-", "Euro 90 (N/A)"], ["VFS/Appointment Fee-", "30 Euro (N/A)"], ["Insurance Fee-", "Euro 198 (partly refundable)"], ["Other Cost/Documentation-", "Tk. 25k\nCross-Border Delivery Charge: 10,200 BDT \nRegular VFS Service Fee: 14,900 BDT\nMedical: 11,800 Rupees / 15000 BDT\nAlmost 60,000 BDT \nAfter visa tuition fee deposit:"], ["Service Charge-", "300,000/="]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled/Attested)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled/Attested)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled/Attested)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled/Attested)", "Work Experience / Salary Certificate with job responsibility details", "Recent color photo (35 × 45 mm). White background", "Recommendation Letter from the University / Department Teacher (if required)", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (if required)", "Kabin / Nikah Nama and Marriage Certificate (in English and Attested Copy)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}, {"name": "GERMAN OPPORTUNITY CARD", "fees": [["Membership Fee-", "30,000/= (N/R) For main applicant\n50,000/= (N/R) For family applicant"], ["Visa Fee-", "Euro 75 (N/R)                                                                                                                                                 (1 Euro = 146+ BDT)"], ["Block Money Deposit-", "Euro 13,341+"], ["ZAB Cost", "Euro 208 (N/R)"], ["Accommodation cost-", "Variable"], ["Other cost-", "Euro 100 (N/R)"], ["Service Charge-", "300,000/= For main applicant\n200,000/= For Spouse & 100,000/= For Children (Per Kid)"]], "checklist": ["CV (in details with all academic information, Thesis, Project, Work Responsibilities)", "Passport – Original -Present and all old (Photocopy of present and old with all Visa Pages)", "SSC / O Levels – Certificate and Mark/Grade Sheet (Apostilled)", "HSC / A Levels / Diploma - Certificate and Mark/Grade Sheet (Apostilled)", "Bachelor – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "Master’s – Certificate, Mark Sheet, Credit Transcript (Apostilled)", "IELTS / PTE / TOEFL / Other English Proficiency certificate / Medium of Instruction Certificate", "Any other academic or professional credentials (Apostilled)", "Work Experience / Salary Certificate with job responsibility details (At least 2 years of experience)", "Recent color photo (35 × 45 mm). White background", "NID ▪ Birth Certificate ▪ Police Clearance Certificate (Apostilled)", "Nikah Nama and Marriage Certificate (in English and Notarized Original & Apostilled Copy)", "For Children (Birth Certificate and School ID Card and Result)", "Parents NID Card (Apostilled)", "Germany Reference (Anyone staying legally)"], "footer": "House #51, Road #16, Sector #12, Uttara, Dhaka\n 01916-276797, 01958-096775, 01958-096751"}];
+let activeIndex = DATA.length ? 0 : -1;
+let canEdit = true; // becomes false once artifact capability confirms read-only
+let artifactApi = null;
+
+const catListEl = document.getElementById('catList');
+const sheetEl = document.getElementById('sheet');
+const statusEl = document.getElementById('status');
+const searchEl = document.getElementById('search');
+const readonlyBanner = document.getElementById('readonlyBanner');
+
+function escHtml(s){
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderSidebar(){
+  const q = searchEl.value.trim().toLowerCase();
+  catListEl.innerHTML = '';
+  DATA.forEach((cat, i) => {
+    if(q && !cat.name.toLowerCase().includes(q)) return;
+    const b = document.createElement('button');
+    b.className = 'cat' + (i === activeIndex ? ' active' : '');
+    b.textContent = cat.name || '(untitled)';
+    b.onclick = () => { activeIndex = i; renderSidebar(); renderSheet(); };
+    catListEl.appendChild(b);
+  });
+  if(catListEl.children.length === 0){
+    catListEl.innerHTML = '<div style="padding:10px;color:var(--muted);font-family:\'Helvetica Neue\',Arial,sans-serif;font-size:13px;">No matches</div>';
+  }
+}
+
+function renderSheet(){
+  if(activeIndex < 0 || !DATA[activeIndex]){
+    sheetEl.innerHTML = '<div class="empty">No category selected. Add one from the sidebar.</div>';
+    return;
+  }
+  const cat = DATA[activeIndex];
+  let html = '';
+  html += '<div class="sheet-head">';
+  html += '<input class="title" value="'+escHtml(cat.name)+'" data-role="name" '+(canEdit?'':'disabled')+'>';
+  html += '<button class="share-btn" id="sendStudentBtn" type="button">📤 Send to student</button>';
+  html += '</div>';
+
+  html += '<div class="section-label">Fees</div>';
+  html += '<table class="fees"><thead><tr><th style="width:42%">Item</th><th>Amount</th><th></th></tr></thead><tbody>';
+  cat.fees.forEach((row, ri) => {
+    html += '<tr data-fee-index="'+ri+'">';
+    html += '<td><input value="'+escHtml(row[0])+'" data-role="fee-label" '+(canEdit?'':'disabled')+'></td>';
+    html += '<td><input value="'+escHtml(row[1])+'" data-role="fee-value" '+(canEdit?'':'disabled')+'></td>';
+    html += '<td class="rm">'+(canEdit?'<button class="rm-btn" data-action="rm-fee" title="Remove row">✕</button>':'')+'</td>';
+    html += '</tr>';
+  });
+  html += '</tbody></table>';
+  if(canEdit) html += '<button class="addrow" data-action="add-fee">+ Add fee row</button>';
+
+  html += '<div class="section-label">Document Checklist</div>';
+  html += '<ul class="checklist">';
+  cat.checklist.forEach((item, ci) => {
+    html += '<li data-check-index="'+ci+'">';
+    html += '<textarea rows="1" data-role="check-item" '+(canEdit?'':'disabled') + '>'+escHtml(item)+'</textarea>';
+    html += (canEdit?'<button class="rm-btn" data-action="rm-check" title="Remove item">✕</button>':'');
+    html += '</li>';
+  });
+  html += '</ul>';
+  if(canEdit) html += '<button class="addrow" data-action="add-check">+ Add checklist item</button>';
+
+  html += '<div class="footer-field">Office address / contact<textarea data-role="footer" '+(canEdit?'':'disabled')+'>'+escHtml(cat.footer||'')+'</textarea></div>';
+
+  sheetEl.innerHTML = html;
+  autoGrow();
+  wireSheetEvents();
+}
+
+function autoGrow(){
+  sheetEl.querySelectorAll('textarea[data-role]').forEach(t => {
+    t.style.height = 'auto';
+    t.style.height = (t.scrollHeight) + 'px';
+    t.addEventListener('input', () => { t.style.height='auto'; t.style.height=(t.scrollHeight)+'px'; });
+  });
+}
+
+function wireSheetEvents(){
+  const cat = DATA[activeIndex];
+  sheetEl.querySelectorAll('input[data-role="name"]').forEach(el=>{
+    el.addEventListener('change', () => { cat.name = el.value; renderSidebar(); });
+  });
+  sheetEl.querySelectorAll('input[data-role="fee-label"]').forEach((el,i)=>{
+    el.addEventListener('change', () => { cat.fees[i][0] = el.value; });
+  });
+  sheetEl.querySelectorAll('input[data-role="fee-value"]').forEach((el,i)=>{
+    el.addEventListener('change', () => { cat.fees[i][1] = el.value; });
+  });
+  sheetEl.querySelectorAll('textarea[data-role="check-item"]').forEach((el,i)=>{
+    el.addEventListener('change', () => { cat.checklist[i] = el.value; });
+  });
+  const footerEl = sheetEl.querySelector('textarea[data-role="footer"]');
+  if(footerEl) footerEl.addEventListener('change', () => { cat.footer = footerEl.value; });
+
+  sheetEl.querySelectorAll('[data-action="rm-fee"]').forEach((btn,i)=>{
+    btn.addEventListener('click', () => { cat.fees.splice(i,1); renderSheet(); });
+  });
+  sheetEl.querySelectorAll('[data-action="rm-check"]').forEach((btn,i)=>{
+    btn.addEventListener('click', () => { cat.checklist.splice(i,1); renderSheet(); });
+  });
+  const addFeeBtn = sheetEl.querySelector('[data-action="add-fee"]');
+  if(addFeeBtn) addFeeBtn.addEventListener('click', () => { cat.fees.push(['New item','']); renderSheet(); });
+  const addCheckBtn = sheetEl.querySelector('[data-action="add-check"]');
+  if(addCheckBtn) addCheckBtn.addEventListener('click', () => { cat.checklist.push(''); renderSheet(); });
+
+  const sendBtn = sheetEl.querySelector('#sendStudentBtn');
+  if(sendBtn) sendBtn.addEventListener('click', () => openShareModal(cat));
+}
+
+/* ---------- Send-to-student (single country, read-only, shareable) ---------- */
+
+function buildShareText(cat){
+  let lines = [];
+  lines.push('MOVES EDUCATION BD');
+  lines.push(cat.name + ' — Costing Sheet');
+  lines.push('');
+  if(cat.fees.length){
+    lines.push('Fees:');
+    cat.fees.forEach(row => {
+      const label = (row[0]||'').trim();
+      const val = (row[1]||'').trim();
+      if(label || val) lines.push('• ' + label + ' ' + val);
+    });
+    lines.push('');
+  }
+  if(cat.checklist.length){
+    lines.push('Document Checklist:');
+    cat.checklist.forEach((item,i) => { if(item.trim()) lines.push((i+1)+'. '+item.trim()); });
+    lines.push('');
+  }
+  if(cat.footer && cat.footer.trim()){
+    lines.push(cat.footer.trim());
+  }
+  return lines.join('\n');
+}
+
+function buildShareHTML(cat){
+  let feeRows = cat.fees.map(row =>
+    '<tr><td>'+escHtml(row[0])+'</td><td>'+escHtml(row[1])+'</td></tr>'
+  ).join('');
+  let checkItems = cat.checklist.filter(i=>i.trim()).map(i =>
+    '<li>'+escHtml(i)+'</li>'
+  ).join('');
+  return '<!DOCTYPE html>\n<html lang="en"><head><meta charset="UTF-8">\n'+
+    '<meta name="viewport" content="width=device-width, initial-scale=1">\n'+
+    '<title>'+escHtml(cat.name)+' — MOVES Education BD Costing</title>\n'+
+    '<style>'+
+    'body{font-family:Georgia,serif;background:#f6f2ea;color:#1c2b2e;margin:0;padding:30px 18px;}'+
+    '.wrap{max-width:640px;margin:0 auto;background:#fffdf8;border:1px solid #c9bfa8;border-radius:10px;padding:26px 28px;}'+
+    'h1{font-size:15px;letter-spacing:0.08em;text-transform:uppercase;color:#6b6355;margin:0 0 2px;font-family:Helvetica,Arial,sans-serif;}'+
+    'h2{font-size:24px;margin:0 0 18px;}'+
+    'table{width:100%;border-collapse:collapse;margin-bottom:18px;}'+
+    'td{padding:7px 6px;border-bottom:1px solid #efe8da;font-size:14.5px;vertical-align:top;}'+
+    'td:first-child{color:#6b6355;width:45%;}'+
+    'td:last-child{font-weight:600;}'+
+    '.section{font-family:Helvetica,Arial,sans-serif;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#6b6355;margin:18px 0 8px;}'+
+    'ul{margin:0;padding-left:20px;} li{margin-bottom:6px;font-size:13.5px;}'+
+    '.footer{margin-top:18px;font-family:Helvetica,Arial,sans-serif;font-size:12.5px;color:#6b6355;white-space:pre-wrap;}'+
+    '</style></head><body><div class="wrap">'+
+    '<h1>MOVES Education BD — Costing &amp; Document Sheet</h1>'+
+    '<h2>'+escHtml(cat.name)+'</h2>'+
+    (cat.fees.length ? '<table>'+feeRows+'</table>' : '') +
+    (checkItems ? '<div class="section">Document Checklist</div><ul>'+checkItems+'</ul>' : '') +
+    (cat.footer && cat.footer.trim() ? '<div class="footer">'+escHtml(cat.footer)+'</div>' : '') +
+    '</div></body></html>';
+}
+
+function openShareModal(cat){
+  const modal = document.getElementById('shareModal');
+  let feeRows = cat.fees.map(row =>
+    '<tr><td>'+escHtml(row[0])+'</td><td>'+escHtml(row[1])+'</td></tr>'
+  ).join('');
+  let checkItems = cat.checklist.filter(i=>i.trim()).map(i =>
+    '<li>'+escHtml(i)+'</li>'
+  ).join('');
+  let html = '<div class="modal-box">';
+  html += '<button class="modal-close" id="closeShareModal" type="button">✕</button>';
+  html += '<h3>'+escHtml(cat.name)+'</h3>';
+  html += '<div class="modal-sub">Read-only preview — this is what the student will receive</div>';
+  if(cat.fees.length) html += '<table class="preview-fees">'+feeRows+'</table>';
+  if(checkItems) html += '<ul class="preview-checklist">'+checkItems+'</ul>';
+  if(cat.footer && cat.footer.trim()) html += '<div class="preview-footer">'+escHtml(cat.footer)+'</div>';
+  html += '<div class="modal-actions">';
+  html += '<button class="btn primary" id="copyShareBtn" type="button">📋 Copy as text</button>';
+  html += '<button class="btn" id="downloadShareBtn" type="button">⬇ Download file</button>';
+  html += '</div>';
+  html += '<div class="status" id="shareStatus" style="margin-top:10px;"></div>';
+  html += '</div>';
+  modal.innerHTML = html;
+  modal.style.display = 'flex';
+
+  document.getElementById('closeShareModal').addEventListener('click', closeShareModal);
+  modal.addEventListener('click', (e) => { if(e.target === modal) closeShareModal(); });
+
+  document.getElementById('copyShareBtn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('shareStatus');
+    try{
+      await navigator.clipboard.writeText(buildShareText(cat));
+      statusEl.textContent = 'Copied — paste it into WhatsApp, SMS or email.';
+    }catch(e){
+      statusEl.textContent = 'Could not copy automatically — select and copy manually.';
+    }
+  });
+
+  document.getElementById('downloadShareBtn').addEventListener('click', async () => {
+    const statusEl = document.getElementById('shareStatus');
+    const filename = (cat.name||'costing').replace(/[^a-z0-9]+/gi,'-').toLowerCase() + '-costing.html';
+    const html = buildShareHTML(cat);
+    try{
+      if(window.claude && window.claude.use){
+        const downloads = await window.claude.use('downloads');
+        if(downloads){
+          await downloads.save({filename: filename, data: html});
+          statusEl.textContent = 'Saved — send that file to the student.';
+          return;
+        }
+      }
+      throw new Error('no-downloads-capability');
+    }catch(e){
+      try{
+        const blob = new Blob([html], {type:'text/html'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = filename;
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        statusEl.textContent = 'Downloaded — send that file to the student.';
+      }catch(e2){
+        statusEl.textContent = 'Download unavailable — use Copy as text instead.';
+      }
+    }
+  });
+}
+
+function closeShareModal(){
+  const modal = document.getElementById('shareModal');
+  modal.style.display = 'none';
+  modal.innerHTML = '';
+}
+
+document.getElementById('addCatBtn').addEventListener('click', () => {
+  const nameInput = document.getElementById('newCatName');
+  const name = nameInput.value.trim();
+  if(!name) return;
+  DATA.push({name: name, fees: [], checklist: [], footer: ''});
+  activeIndex = DATA.length - 1;
+  nameInput.value = '';
+  renderSidebar(); renderSheet();
+});
+
+document.getElementById('deleteBtn').addEventListener('click', () => {
+  if(activeIndex < 0) return;
+  if(!confirm('Delete "'+DATA[activeIndex].name+'"? This cannot be undone.')) return;
+  DATA.splice(activeIndex,1);
+  activeIndex = DATA.length ? 0 : -1;
+  renderSidebar(); renderSheet();
+});
+
+searchEl.addEventListener('input', renderSidebar);
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const root = document.documentElement;
+  const cur = root.getAttribute('data-theme');
+  root.setAttribute('data-theme', cur === 'dark' ? 'light' : 'dark');
+});
+
+function buildDocument(){
+  // returns a full HTML string identical to this page but with current DATA embedded,
+  // so publish() persists the latest edits.
+  const serialized = JSON.stringify(DATA);
+  return document.documentElement.outerHTML.replace(
+    /let DATA = .*?;\n/,
+    'let DATA = ' + serialized + ';\n'
+  );
+}
+
+async function trySave(){
+  statusEl.textContent = 'Saving…';
+  try{
+    if(!artifactApi){
+      statusEl.textContent = 'Save unavailable in this view.';
+      return;
+    }
+    const html = '<!DOCTYPE html>\n' + buildDocument();
+    const res = await artifactApi.publish(html);
+    statusEl.textContent = 'Saved.';
+    setTimeout(()=>{ if(statusEl.textContent==='Saved.') statusEl.textContent=''; }, 2500);
+  }catch(e){
+    if(e && e.message === 'conflict'){
+      statusEl.textContent = 'Someone else saved changes — please re-check this sheet.';
+    } else if(e && (e.code === 'not_granted' || e.code === 'not_writer' || e.message==='not_granted' || e.message==='not_writer')){
+      statusEl.textContent = "You don't have edit access.";
+    } else {
+      statusEl.textContent = 'Save failed — try again.';
+    }
+  }
+}
+document.getElementById('saveBtn').addEventListener('click', trySave);
+
+async function initCapabilities(){
+  try{
+    if(window.claude && window.claude.use){
+      artifactApi = await window.claude.use('artifact');
+      const userApi = await window.claude.use('user');
+      if(userApi){
+        try{
+          const can = userApi.canEdit ? userApi.canEdit() : true;
+          if(can === false){ canEdit = false; }
+        }catch(e){}
+      }
+      if(!artifactApi){
+        canEdit = false;
+      }
+    } else {
+      canEdit = false;
+    }
+  }catch(e){
+    canEdit = false;
+  }
+  if(!canEdit){
+    readonlyBanner.style.display = 'block';
+    document.getElementById('saveBtn').disabled = true;
+    document.getElementById('deleteBtn').disabled = true;
+    document.getElementById('addCatBtn').disabled = true;
+  }
+  renderSidebar();
+  renderSheet();
+}
+
+initCapabilities();
+</script>
+</body>
+</html>
